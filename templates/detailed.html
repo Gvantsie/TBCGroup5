@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Detailed Page
+{% endblock %}
+
+{% block container %}
+<div class="row">
+    <img src="/static/images/{{product['img']}}" style="width: 50%">
+    <h4>Name: {{ product['name'] }}</h4>
+    <h3>Price: {{ product['price'] }}</h3>
+</div>
+<hr>
+<div class="row m-3">
+    {% for comment in comments %}
+       {{ comment.text }}<br>
+    {% endfor %}
+</div>
+{% endblock %}
+
+

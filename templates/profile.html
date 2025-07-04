@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile Page
+{% endblock %}
+
+{% block container %}
+
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <p> Name: {{ user['username'] }}</p>
+            </div>
+            <div class="row">
+                <p> Password: {{ user['password'] }}</p>
+            </div>
+            <div class="row">
+                <img src="#">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
