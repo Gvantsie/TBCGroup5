@@ -15,7 +15,7 @@ Home Page
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text"> {{ product.price }} ₾</p>
                 <a href="/detailed/{{ product['id'] }}" class="btn btn-outline-warning">ნახვა</a>
-                {% if current_user.role == "Moderator" %}
+                {% if current_user.role == "Admin" %}
                     <a href="/delete_product/{{ product['id'] }}" class="btn btn-outline-danger">პროდუქტის წაშლა</a>
                     <a href="/edit_product/{{ product['id'] }}" class="btn btn-outline-info">რედაქტირება</a>
                 {% endif %}
