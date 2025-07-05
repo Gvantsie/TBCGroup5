@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block container %}
+<h3 class="text-center m-3">კალათა</h3>
+{% if not products %}
+<div class="alert alert-info text-center" role="alert">
+    კალათა ცარიელია!
+</div>
+{% endif %}
+<div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-2 mt-2">
+    {% for product in products %}
+    <div class="col">
+        <div class="card" style="width: 100%; height: 100%">
+            <img src="/static/images/{{ product.img }}" class="card-img-top"
+                 alt="{{ product.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text"> {{ product.price }} ₾</p>
+                <a href="/remove_from_cart/{{ product.id }}" class="btn btn-danger mb-2">კალათიდან წაშლა</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row mt-2">
+    <a href="/" class="btn btn-outline-info">შოპინგის გაგრძელება</a>
+</div>
+{% endblock %}
