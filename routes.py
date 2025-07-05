@@ -1,18 +1,17 @@
-from flask import render_template, redirect, flash
+from flask import render_template, flash, session, redirect
 from forms import RegisterForm, ProductForm, LoginForm
 from ext import app, db
 from models import Product, Comment, User
 from flask_login import login_user, logout_user, login_required
 import os
 
-profiles = []
-
 
 @app.route("/")
 def home():
     # products = Product.query.filter(Product.price > 150, Product.name == "New Puppy").all()
     products = Product.query.all()
-    return render_template("index.html", produktebi=products, role="Admin")
+    cart_items = len(get_cart_items())
+    return render_template("index.html", produktebi=products, role="Admin", cart_items=cart_items)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -29,6 +28,7 @@ def register():
 
     return render_template("register.html", form=form)
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -37,19 +37,11 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
 
-        flash("თქვენ წარმატებით გაიაზრეთ ავტორიზაცია", category="success")
+        flash("თქვენ წარმატებით გაიარეთ ავტორიზაცია", category="success")
         return redirect("/")
 
     return render_template("login.html", form=form)
 
-
-@app.route("/edit_role/<int:id>")
-def edit_role(id):
-    user = User.query.get(id)
-    user.role = "Moderator"
-    db.session.commit()
-    flash("თქვენი როლი გახდა მოდერატორი")
-    return redirect("/")
 
 @app.route("/logout")
 def logout():
@@ -108,6 +100,37 @@ def detailed(product_id):
     return render_template("detailed.html", product=detailed_product, comments=comment)
 
 
+def get_cart_items():
+    return session.get('cart', [])
 
 
+@app.route("/cart")
+def cart():
+    cart_product_ids = get_cart_items()
+    length = len(cart_product_ids)
+    if cart_product_ids:
+        products = Product.query.filter(Product.id.in_(cart_product_ids)).all()
+    else:
+        products = []
+    return render_template('cart.html', products=products, cart_items=length)
 
+
+@app.route('/add_to_cart/<int:item_id>', methods=['GET', 'POST'])
+def add_to_cart(item_id):
+    cart = session.get('cart', [])
+    cart.append(item_id)
+
+    session['cart'] = cart
+    flash("პროდუქტი დამატებულია კალათაში", "success")
+    return redirect("/")
+
+
+@app.route('/remove_from_cart/<int:item_id>')
+def remove_from_cart(item_id):
+    cart = session.get('cart', [])
+    if item_id in cart:
+        cart.remove(item_id)
+        session['cart'] = cart
+    flash("პროდუქტი წაშლილია კალათიდან", "success")
+
+    return redirect("/cart")
