@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect
+from flask import Flask, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -13,4 +13,4 @@ login_manager.login_view = "login"
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     flash("ამ გვერდზე შესასვლელად საჭიროა ავტორიზაცია", "warning")
-    return redirect('login')
+    return redirect(url_for('login'))
