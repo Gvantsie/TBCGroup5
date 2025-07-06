@@ -105,6 +105,7 @@ def get_cart_items():
 
 
 @app.route("/cart")
+@login_required
 def cart():
     cart_product_ids = get_cart_items()
     length = len(cart_product_ids)
@@ -116,6 +117,7 @@ def cart():
 
 
 @app.route('/add_to_cart/<int:item_id>', methods=['GET', 'POST'])
+@login_required
 def add_to_cart(item_id):
     cart = session.get('cart', [])
     cart.append(item_id)
@@ -126,6 +128,7 @@ def add_to_cart(item_id):
 
 
 @app.route('/remove_from_cart/<int:item_id>')
+@login_required
 def remove_from_cart(item_id):
     cart = session.get('cart', [])
     if item_id in cart:
